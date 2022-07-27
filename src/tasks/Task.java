@@ -1,3 +1,5 @@
+package tasks;
+
 public class Task {
     protected int id;
     protected String title;

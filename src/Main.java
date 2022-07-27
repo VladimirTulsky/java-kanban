@@ -1,3 +1,7 @@
+import manager.TaskManager;
+import tasks.Epic;
+import tasks.Subtask;
+
 public class Main {
     public static void main (String[] args) {
         Epic e1 = new Epic("Пройти курс Java-разработчик", "пройти все спринты и выполнить задания", "NEW");
