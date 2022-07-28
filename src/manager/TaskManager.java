@@ -97,6 +97,7 @@ public class TaskManager {
     public void removeAllTasks() {
         tasks.clear();
     }
+
     public void removeAllEpicsAndSubtasks() {
         epics.clear();
         subtasks.clear();
@@ -105,6 +106,7 @@ public class TaskManager {
     public void removeTaskById(int id) {
         tasks.remove(id);
     }
+
     public void removeEpicById(int id) {
         ArrayList<Integer> subtasksInEpic = epics.get(id).getSubtaskIDs();
         for (int subtaskId : subtasksInEpic) {
@@ -112,6 +114,7 @@ public class TaskManager {
         }
         epics.remove(id);
     }
+
     public void removeSubtaskById(Integer id) {
         int epicID = subtasks.get(id).getEpicID();
         epics.get(epicID).getSubtaskIDs().remove(id);
