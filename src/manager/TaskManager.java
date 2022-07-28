@@ -63,6 +63,9 @@ public class TaskManager {
                 epic.getSubtaskIDs().add(subtask.getId());
             }
         }
+        if (epics.containsKey(subtask.getEpicID())) {
+            update(epics.get(subtask.getEpicID()));
+        }
     }
 
     public void update(Task task) {
@@ -118,10 +121,11 @@ public class TaskManager {
     public void removeSubtaskById(Integer id) {
         int epicID = subtasks.get(id).getEpicID();
         epics.get(epicID).getSubtaskIDs().remove(id);
+        update(epics.get(epicID));
         subtasks.remove(id);
     }
 
-    public ArrayList<Subtask> getAllSubtasksFromEpic(int id) {
+    public ArrayList<Subtask> getAllSubtasksByEpic(int id) {
         ArrayList<Integer> numbers = epics.get(id).getSubtaskIDs();
         ArrayList<Subtask> subtaskArrayList = new ArrayList<>();
         for (int item : numbers) {
