@@ -83,13 +83,16 @@ public class TaskManager {
             } else if (subtasks.get(id).getStatus().equals("IN_PROGRESS")) {
                 epic.setStatus("IN_PROGRESS");
                 return;
+            } else if (epic.getStatus().equals("DONE") && subtasks.get(id).getStatus().equals("NEW")) {
+                epic.setStatus("IN_PROGRESS");
+                return;
             }
         }
     }
+
     public void update(Subtask subtask) {
         subtasks.put(subtask.getId(), subtask);
     }
-
 
     public void removeAllTasks() {
         tasks.clear();
@@ -98,6 +101,7 @@ public class TaskManager {
         epics.clear();
         subtasks.clear();
     }
+
     public void removeTaskById(int id) {
         tasks.remove(id);
     }
@@ -108,7 +112,6 @@ public class TaskManager {
         }
         epics.remove(id);
     }
-
     public void removeSubtaskById(Integer id) {
         int epicID = subtasks.get(id).getEpicID();
         epics.get(epicID).getSubtaskIDs().remove(id);
