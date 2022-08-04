@@ -3,7 +3,7 @@ package tasks;
 public class Subtask extends Task {
     protected int epicID;
 
-    public Subtask(String title, String description, String status, int epicID) {
+    public Subtask(String title, String description, Status status, int epicID) {
         super(title, description, status);
         this.epicID = epicID;
     }
