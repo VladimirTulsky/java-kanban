@@ -8,16 +8,16 @@ import java.util.List;
 public class InMemoryHistoryManager implements HistoryManager {
     final static private int HISTORY_SIZE = 10;
 
-    protected static List<Task> historyList = new ArrayList<>();
+    private List<Task> historyList = new ArrayList<>();
 
     @Override
-    public void add(Task task) {
-        if (historyList.size() < HISTORY_SIZE) {
-            historyList.add(task);
-        } else {
+    public int add(Task task) {
+        historyList.add(task);
+        if (historyList.size() >= HISTORY_SIZE) {
             historyList.remove(0);
             historyList.add(task);
         }
+        return task.getId();
     }
 
     @Override
