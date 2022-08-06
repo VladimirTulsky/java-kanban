@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    final static private int HISTORY_SIZE = 10;
+    private final static int HISTORY_SIZE = 10;
 
     private List<Task> historyList = new ArrayList<>();
 
