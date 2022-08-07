@@ -46,6 +46,8 @@ public class Main {
         taskManager.getEpicById(2);
         taskManager.getTaskById(1);
         System.out.println(taskManager.getHistory());
+        System.out.println("Количество элементов в истории:");
+        System.out.println(taskManager.getHistory().size());
         System.out.println("--------------------------------------");
         System.out.println("Удаляем эпик и все его подзадачи и проверяем список задач");
         taskManager.removeEpicById(2);
