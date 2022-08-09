@@ -5,24 +5,25 @@ import tasks.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     private int idCounter = 1;
 
     private HistoryManager historyManager = Managers.getDefaultHistory();
-    protected HashMap<Integer, Task> tasks = new HashMap<>();
-    protected HashMap<Integer, Epic> epics = new HashMap<>();
-    protected HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    protected Map<Integer, Task> tasks = new HashMap<>();
+    protected Map<Integer, Epic> epics = new HashMap<>();
+    protected Map<Integer, Subtask> subtasks = new HashMap<>();
 
-    public HashMap<Integer, Task> getTasks() {
+    public Map<Integer, Task> getTasks() {
         return tasks;
     }
 
-    public HashMap<Integer, Epic> getEpics() {
+    public Map<Integer, Epic> getEpics() {
         return epics;
     }
 
-    public HashMap<Integer, Subtask> getSubtasks() {
+    public Map<Integer, Subtask> getSubtasks() {
         return subtasks;
     }
 
@@ -84,7 +85,7 @@ public class InMemoryTaskManager implements TaskManager {
     public int update(Epic epic) {
         epic.setStatus(Status.NEW);
         epics.put(epic.getId(), epic);
-        ArrayList<Integer> epicList = epic.getSubtaskIDs();
+        List<Integer> epicList = epic.getSubtaskIDs();
         if (epic.getSubtaskIDs().isEmpty()) {
             return epic.getId();
         }
@@ -127,7 +128,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeEpicById(int id) {
-        ArrayList<Integer> subtasksInEpic = epics.get(id).getSubtaskIDs();
+        List<Integer> subtasksInEpic = epics.get(id).getSubtaskIDs();
         for (int subtaskId : subtasksInEpic) {
             subtasks.remove(subtaskId);
         }
@@ -143,9 +144,9 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Subtask> getAllSubtasksByEpic(int id) {
-        ArrayList<Integer> numbers = epics.get(id).getSubtaskIDs();
-        ArrayList<Subtask> subtaskArrayList = new ArrayList<>();
+    public List<Subtask> getAllSubtasksByEpic(int id) {
+        List<Integer> numbers = epics.get(id).getSubtaskIDs();
+        List<Subtask> subtaskArrayList = new ArrayList<>();
         for (int item : numbers) {
             subtaskArrayList.add(subtasks.get(item));
         }
