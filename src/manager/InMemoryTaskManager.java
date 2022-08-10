@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int idCounter = 1;
-
-    private HistoryManager historyManager = Managers.getDefaultHistory();
+    private static int idCounter = 1;
+    private final HistoryManager historyManager = Managers.getDefaultHistory();
     protected Map<Integer, Task> tasks = new HashMap<>();
     protected Map<Integer, Epic> epics = new HashMap<>();
     protected Map<Integer, Subtask> subtasks = new HashMap<>();
@@ -25,6 +24,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     public Map<Integer, Subtask> getSubtasks() {
         return subtasks;
+    }
+
+    public static int getIdCounter() {
+        return idCounter;
     }
 
     public Task getTaskById(int id) {
