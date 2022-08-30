@@ -2,6 +2,7 @@ package manager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CustomLinkedList<T> {
     public Node<T> head;
@@ -22,7 +23,7 @@ public class CustomLinkedList<T> {
     }
 
     public void removeNode(Node<T> node) {
-        if (node == head) {
+        if (node.equals(head)) {
             head = node.next;
             if (node.next != null) {
                 node.next.prev = null;
