@@ -22,7 +22,7 @@ public class CustomLinkedList<T> {
     }
 
     public void removeNode(Node<T> node) {
-        if (node.equals(head)) {
+        if (node == head) {
             head = node.next;
             if (node.next != null) {
                 node.next.prev = null;
