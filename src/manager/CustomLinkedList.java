@@ -2,7 +2,6 @@ package manager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class CustomLinkedList<T> {
     public Node<T> head;
