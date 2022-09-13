@@ -5,8 +5,12 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TaskManager {
+    public Map<Integer, Task> getTasks();
+    public Map<Integer, Epic> getEpics();
+    public Map<Integer, Subtask> getSubtasks();
 
     Task getTaskById(int id);
     Epic getEpicById(int id);

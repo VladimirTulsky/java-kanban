@@ -1,10 +1,12 @@
 package tasks;
 
+import filemanager.TaskType;
+
 public class Subtask extends Task {
     protected int epicID;
 
-    public Subtask(int id, String title, String description, Status status, int epicID) {
-        super(id, title, description, status);
+    public Subtask(int id, TaskType type, String title, String description, Status status, int epicID) {
+        super(id, type, title, description, status);
         this.epicID = epicID;
     }
 

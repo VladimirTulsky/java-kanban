@@ -1,13 +1,17 @@
 package tasks;
 
+import filemanager.TaskType;
+
 public class Task {
     protected int id;
+    protected TaskType type;
     protected String title;
     protected String description;
     protected Status status;
 
-    public Task(int id, String title, String description, Status status) {
+    public Task(int id, TaskType type, String title, String description, Status status) {
         this.id = id;
+        this.type = type;
         this.title = title;
         this.description = description;
         this.status = status;
@@ -19,6 +23,10 @@ public class Task {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public TaskType getType() {
+        return type;
     }
 
     public String getTitle() {

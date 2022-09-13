@@ -6,7 +6,7 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final CustomLinkedList<Task> historyList = new CustomLinkedList<>();
+    public final CustomLinkedList<Task> historyList = new CustomLinkedList<>();
     private final HashMap<Integer, Node<Task>> nodeMap = new HashMap<>();
 
     @Override
@@ -26,6 +26,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public List<Task> getHistory() {
+        if (nodeMap.isEmpty()) return null;
         return historyList.getTasks();
     }
 }
