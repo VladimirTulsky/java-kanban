@@ -18,7 +18,7 @@ import java.util.Map;
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
     //проверочный main
     public static void main(String[] args) {
-        FileBackedTasksManager fileManager = Managers.getDefaultFileManager();
+        var fileManager = Managers.getDefaultFileManager();
         //создаем объекты и закидываем в файл
         fileManager.add(new Task(FileBackedTasksManager.getIdCounter(), TaskType.TASK, "Продать авто", "продать", Status.NEW));
         fileManager.add(new Task(FileBackedTasksManager.getIdCounter(), TaskType.TASK, "Потратиться на себя", "Сделать себе приятно", Status.NEW));
@@ -27,18 +27,50 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         fileManager.add(new Subtask(FileBackedTasksManager.getIdCounter(), TaskType.SUBTASK, "Стать гуру Spring", "Важная задача", Status.NEW, 3));
         fileManager.add(new Subtask(FileBackedTasksManager.getIdCounter(), TaskType.SUBTASK, "Сдать тесты", "Важная задача", Status.NEW, 3));
         fileManager.add(new Epic(FileBackedTasksManager.getIdCounter(), TaskType.EPIC, "Английский", "дойти до уровня Native", Status.NEW));
-        //закидываем в историю
+        //создаем историю
         fileManager.getEpicById(3);
         fileManager.getEpicById(7);
         fileManager.getTaskById(1);
         fileManager.getTaskById(2);
         fileManager.getEpicById(3);
-        //все данные должны быть в файле
+        //тут все данные должны быть в файле
+
+        //загружаем задачи и историю из файла
+        var fileManager1 = FileBackedTasksManager.loadedFromFileTasksManager();
+        //выводим задачи в консоль
+        System.out.println("All tasks from file---------------------");
+        System.out.println(fileManager1.getTasks());
+        System.out.println(fileManager1.getEpics());
+        System.out.println(fileManager1.getSubtasks());
+
+        System.out.println("History---------------------");
+        System.out.println(fileManager1.getHistory());
     }
 
     protected Map<Integer, Task> allTasks = new HashMap<>();
     private final static String HEAD = "id,type,title,description,status,epic\n";
     private final static String PATH = "resources\\data.csv";
+
+    @Override
+    public int add(Task task) {
+        super.add(task);
+        save();
+        return task.getId();
+    }
+
+    @Override
+    public int add(Epic epic) {
+        super.add(epic);
+        save();
+        return epic.getId();
+    }
+
+    @Override
+    public int add(Subtask subtask) {
+        super.add(subtask);
+        save();
+        return subtask.getId();
+    }
 
     @Override
     public Task getTaskById(int id) {
@@ -78,6 +110,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         super.removeSubtaskById(id);
         save();
     }
+
+    //метод возвращает объект с историей из файла
+    public static FileBackedTasksManager loadedFromFileTasksManager () {
+        var fileManager = new FileBackedTasksManager();
+        fileManager.loadFromFile();
+        return fileManager;
+    }
+
     //метод сохранения данных в файл
     public void save() {
         allTasks.clear();
@@ -91,10 +131,19 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
             throw new ManagerSaveException("Ошибка в работе менеджера");
         }
     }
-    //метод загрузки данных из файла
-    public void loadFromFile() throws IOException {
+    //метод загрузки данных из файла, вызывающий методы загрузки задач и истории
+    public void loadFromFile() {
+        tasksFromString();
+        historyFromString();
+    }
 
-        String[] lines = Files.readString(Path.of(PATH)).split("\n");
+    public void tasksFromString() {
+        String[] lines;
+        try {
+            lines = Files.readString(Path.of(PATH)).split("\n");
+        } catch (IOException e) {
+            throw new ManagerSaveException("Не удалось считать файл");
+        }
         if (lines.length < 2) return;
         for (int i = 1; i < lines.length; i++) {
             String line = lines[i];
@@ -126,7 +175,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                     if (getIdCounter() <= id) setIdCounter(++id);
                 }
             }
+        }
+    }
 
+    public void historyFromString() {
+        String[] lines;
+        try {
+            lines = Files.readString(Path.of(PATH)).split("\n");
+        } catch (IOException e) {
+            throw new ManagerSaveException("Не удалось считать файл");
         }
         allTasks.putAll(getTasks());
         allTasks.putAll(getEpics());
