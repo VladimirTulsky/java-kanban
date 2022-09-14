@@ -14,8 +14,10 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
+
     //проверочный main
     public static void main(String[] args) {
         var fileManager = Managers.getDefaultFileManager();
@@ -45,6 +47,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
 
         System.out.println("History---------------------");
         System.out.println(fileManager1.getHistory());
+
+        //сверяем объекты двух менеджеров
+        for (Task task : fileManager.allTasks.values()) {
+            boolean res = task.toString().equals(fileManager1.allTasks.get(task.getId()).toString());
+            if (!res) {
+                System.out.println("Не сходятся объекты из файла");
+            }
+        }
 
     }
 
