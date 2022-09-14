@@ -45,6 +45,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
 
         System.out.println("History---------------------");
         System.out.println(fileManager1.getHistory());
+
     }
 
     protected Map<Integer, Task> allTasks = new HashMap<>();
@@ -172,6 +173,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                     Status status = Enum.valueOf(Status.class, lineContents[4]);
                     int epicId = Integer.parseInt(lineContents[5]);
                     this.subtasks.put(id, new Subtask(id, TaskType.SUBTASK, title, description, status, epicId));
+                    if (epics.containsKey(epicId)) {
+                        epics.get(epicId).getSubtaskIDs().add(id);
+                    }
                     if (getIdCounter() <= id) setIdCounter(++id);
                 }
             }
