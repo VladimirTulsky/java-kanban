@@ -14,7 +14,6 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
 
@@ -60,7 +59,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
 
     protected Map<Integer, Task> allTasks = new HashMap<>();
     private final static String HEAD = "id,type,title,description,status,epic\n";
-    private final static String PATH = "resources\\data.csv";
+    private final static String PATH = "resources/data.csv";
 
     @Override
     public int add(Task task) {
