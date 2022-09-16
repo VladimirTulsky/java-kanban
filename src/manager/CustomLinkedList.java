@@ -38,6 +38,10 @@ public class CustomLinkedList<T> {
     public List getTasks() {
         List<T> historyList = new ArrayList<>();
         Node<T> item = head;
+        if (head.next == null) {
+            historyList.add(item.value);
+            return historyList;
+        }
         while(item.value != null) {
             historyList.add(item.value);
             item = item.next;
