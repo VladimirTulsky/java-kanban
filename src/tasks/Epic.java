@@ -9,7 +9,7 @@ public class Epic extends Task {
     protected List<Integer> subtaskIDs;
 
     public Epic(int id, TaskType type, String title, String description, Status status) {
-        super(id, type, title, description, status);
+        super(id, type, title, description, status, null, null);
         subtaskIDs = new ArrayList<>();
     }
 
@@ -26,9 +26,13 @@ public class Epic extends Task {
         return "Epic{" +
                 "subtaskIDs=" + subtaskIDs +
                 ", id=" + id +
+                ", type=" + type +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
+                ", status=" + status +
+                ", duration=" + duration +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
                 '}';
     }
 }

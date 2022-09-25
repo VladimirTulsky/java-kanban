@@ -2,19 +2,35 @@ package tasks;
 
 import filemanager.TaskType;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Task {
     protected int id;
     protected TaskType type;
     protected String title;
     protected String description;
     protected Status status;
+    protected Duration duration;
+    protected LocalDateTime startTime;
+    protected LocalDateTime endTime;
 
-    public Task(int id, TaskType type, String title, String description, Status status) {
+    public Task(int id, TaskType type, String title, String description, Status status, LocalDateTime startTime, Duration duration) {
         this.id = id;
         this.type = type;
         this.title = title;
         this.description = description;
         this.status = status;
+        this.startTime = startTime;
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
     }
 
     public int getId() {
@@ -49,17 +65,37 @@ public class Task {
         return status;
     }
 
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
     }
 
     @Override
     public String toString() {
         return "Task{" +
                 "id=" + id +
+                ", type=" + type +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
+                ", status=" + status +
+                ", duration=" + duration +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
                 '}';
     }
 }

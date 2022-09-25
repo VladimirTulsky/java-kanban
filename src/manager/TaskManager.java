@@ -33,4 +33,15 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
+    void intersectionCheck();
+
+    void getPrioritizedTasks();
+
+    void getTaskEndTime(Task task);
+
+    void getEpicTimesAndDuration(Epic epic);
+
+    void getSubtaskEndTime(Subtask subtask);
+
+
 }
