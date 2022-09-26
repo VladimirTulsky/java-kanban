@@ -172,18 +172,28 @@ public class InMemoryTaskManager implements TaskManager {
         if (epic.getSubtaskIDs().isEmpty()) {
             return epic.getId();
         }
+        Status status = Status.NEW;
         for (int id : epicList) {
             if (subtasks.get(id).getStatus() == Status.DONE) {
-                epic.setStatus(Status.DONE);
+                status = status.DONE;
+            } else {
+                status = Status.NEW;
                 break;
-            } else if (subtasks.get(id).getStatus() == Status.IN_PROGRESS) {
-                epic.setStatus(Status.IN_PROGRESS);
-                return epic.getId();
-            } else if (epic.getStatus() == Status.DONE && subtasks.get(id).getStatus() == Status.NEW) {
-                epic.setStatus(Status.IN_PROGRESS);
-                return epic.getId();
             }
         }
+        if (status == Status.DONE) {
+            epic.setStatus(status);
+            return epic.getId();
+        }
+        for (int id : epicList) {
+            if (subtasks.get(id).getStatus() == Status.NEW) {
+                status = status.NEW;
+            } else {
+                status = Status.IN_PROGRESS;
+                break;
+            }
+        }
+        epic.setStatus(status);
         return epic.getId();
     }
     @Override
