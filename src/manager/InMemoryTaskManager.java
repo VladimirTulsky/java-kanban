@@ -31,6 +31,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (o2.getStartTime() == null) return -1;
         if (o1.getStartTime().isAfter(o2.getStartTime())) return 1;
         if (o1.getStartTime().isBefore(o2.getStartTime())) return -1;
+        if (o1.getStartTime().isEqual(o2.getStartTime())) return o1.getId() - o2.getId();
         return 0;
     });
 
@@ -50,7 +51,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (flagCheckTimeIsEmpty) {
                 checkTime = task.getEndTime();
                 flagCheckTimeIsEmpty = false;
-            } else {
+            } else if (task.getStartTime() != null) {
                 if (task.getStartTime().isBefore(checkTime)) {
                     throw new ManagerSaveException("Найдено пересечение времени задач, проверьте корректность данных");
                 }
@@ -87,10 +88,10 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setStartTime(start);
         epic.setEndTime(end);
         for (Integer id : epic.getSubtaskIDs()) {
-            if (subtasks.get(id).getStartTime().isBefore(start)) {
+            if (subtasks.get(id).getStartTime() != null && subtasks.get(id).getStartTime().isBefore(start)) {
                 start = subtasks.get(id).getStartTime();
             }
-            if (subtasks.get(id).getEndTime().isAfter(end)) {
+            if (subtasks.get(id).getStartTime() != null && subtasks.get(id).getEndTime().isAfter(end)) {
                 end = subtasks.get(id).getEndTime();
             }
         }

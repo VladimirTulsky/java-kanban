@@ -64,19 +64,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     String title = lineContents[2];
                     String description = lineContents[3];
                     Status status = Enum.valueOf(Status.class, lineContents[4]);
-                    Duration duration = Duration.parse(lineContents[5]);
-                    LocalDateTime startTime = LocalDateTime.parse(lineContents[6]);
-                    this.tasks.put(id, new Task(id, TaskType.TASK, title, description, status, startTime, duration));
-                    tasks.get(id).setEndTime(LocalDateTime.parse(lineContents[7]));
+                    Duration duration = null;
+                    if (!lineContents[5].equals("null")) duration = Duration.parse(lineContents[5]);
+                    LocalDateTime startTime = null;
+                    if (!lineContents[6].equals("null")) startTime = LocalDateTime.parse(lineContents[6]);
+                    Task task = new Task(id, TaskType.TASK, title, description, status, startTime, duration);
+                    if (!lineContents[6].equals("null")) task.setEndTime(LocalDateTime.parse(lineContents[7]));
+                    tasks.put(id, task);
                     if (getIdCounter() <= id) setIdCounter(++id);
-                    prioritizedTasks.add(tasks.get(id));
+                    prioritizedTasks.add(task);
                 }
                 if (lineContents[1].equals("EPIC")) {
                     int id = Integer.parseInt(lineContents[0]);
                     String title = lineContents[2];
                     String description = lineContents[3];
                     Status status = Enum.valueOf(Status.class, lineContents[4]);
-                    this.epics.put(id, new Epic(id, TaskType.EPIC, title, description, status));
+                    Epic epic = new Epic(id, TaskType.EPIC, title, description, status);
+                    epics.put(id, epic);
                     for (Subtask subtask : subtasks.values()) {
                         if (epics.containsKey(subtask.getEpicID())) {
                             epics.get(subtask.getEpicID()).getSubtaskIDs().add(subtask.getId());
@@ -90,18 +94,21 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     String title = lineContents[2];
                     String description = lineContents[3];
                     Status status = Enum.valueOf(Status.class, lineContents[4]);
-                    Duration duration = Duration.parse(lineContents[5]);
-                    LocalDateTime startTime = LocalDateTime.parse(lineContents[6]);
+                    Duration duration = null;
+                    if (!lineContents[5].equals("null")) duration = Duration.parse(lineContents[5]);
+                    LocalDateTime startTime = null;
+                    if (!lineContents[6].equals("null")) startTime = LocalDateTime.parse(lineContents[6]);
                     int epicId = Integer.parseInt(lineContents[8]);
-                    this.subtasks.put(id, new Subtask(id, TaskType.SUBTASK, title, description, status, epicId, startTime, duration));
+                    Subtask subtask = new Subtask(id, TaskType.SUBTASK, title, description, status, epicId, startTime, duration);
+                    if (!lineContents[6].equals("null")) subtask.setEndTime(LocalDateTime.parse(lineContents[7]));
+                    subtasks.put(id, subtask);
                     if (epics.containsKey(epicId)) {
                         epics.get(epicId).getSubtaskIDs().add(id);
                     }
-                    subtasks.get(id).setEndTime(LocalDateTime.parse(lineContents[7]));
                     if (getIdCounter() <= id) setIdCounter(++id);
-                    prioritizedTasks.add(subtasks.get(id));
-                    if (epics.containsKey(subtasks.get(id).getEpicID())) {
-                        getEpicTimesAndDuration(epics.get(subtasks.get(id).getEpicID()));
+                    prioritizedTasks.add(subtask);
+                    if (epics.containsKey(subtask.getEpicID())) {
+                        getEpicTimesAndDuration(epics.get(subtask.getEpicID()));
                     }
                 }
             }

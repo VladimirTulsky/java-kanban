@@ -40,10 +40,6 @@ public class Main {
         var fileManager1 = FileBackedTasksManager.loadedFromFileTasksManager();
         System.out.println(("All tasks------------------"));
 
-        fileManager1.getTaskById(1);
-        fileManager1.getEpicById(7);
-        fileManager1.getEpicById(3);
-        fileManager1.removeEpicById(7);
 
         for (Task task : fileManager1.getTasks().values()) {
             System.out.println(task);
