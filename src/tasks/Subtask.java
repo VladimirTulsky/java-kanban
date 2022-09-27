@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 public class Subtask extends Task {
     protected int epicID;
 
-    public Subtask(int id, TaskType type, String title, String description, Status status, int epicID, LocalDateTime dateTime, Duration duration) {
-        super(id, type, title, description, status, dateTime, duration);
+    public Subtask(int id, TaskType type, String title, String description, Status status, int epicID, LocalDateTime startTime, Duration duration) {
+        super(id, type, title, description, status, startTime, duration);
         this.epicID = epicID;
     }
 
