@@ -168,8 +168,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     @Override
     public int add(Task task) {
         super.add(task);
-        getTaskEndTime(task);
-        prioritizedTasks.add(task);
         save();
         return task.getId();
     }
@@ -177,7 +175,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     @Override
     public int add(Epic epic) {
         super.add(epic);
-        getEpicTimesAndDuration(epic);
         save();
         return epic.getId();
     }
@@ -185,8 +182,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     @Override
     public int add(Subtask subtask) {
         super.add(subtask);
-        getSubtaskEndTime(subtask);
-        prioritizedTasks.add(subtask);
         save();
         return subtask.getId();
     }

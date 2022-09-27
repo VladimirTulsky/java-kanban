@@ -1,5 +1,6 @@
 package tests;
 
+import filemanager.ManagerSaveException;
 import filemanager.TaskType;
 import manager.TaskManager;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +14,6 @@ import tasks.Task;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -212,6 +212,81 @@ abstract class TaskManagerTest<T extends TaskManager> {
             assertEquals(i + 1, manager.getHistory().get(i).getId());
         }
     }
+
+    @Test
+    void intersectionCheckTest() {
+        manager.add(new Task(1, TaskType.TASK, "Task1", "test description", Status.NEW,
+                LocalDateTime.of(2022, 9, 26, 18, 0), Duration.ofMinutes(30)));
+        manager.add(new Epic(2, TaskType.EPIC, "new epic", "test description", Status.NEW));
+        manager.add(new Subtask(3, TaskType.SUBTASK, "subtask", "test description", Status.NEW,
+                2, LocalDateTime.of(2022, 9, 26, 18, 0), Duration.ofMinutes(30)));
+        ManagerSaveException ex = Assertions.assertThrows(
+                ManagerSaveException.class,
+                () -> manager.intersectionCheck()
+        );
+        Assertions.assertEquals("Найдено пересечение времени задач, проверьте корректность данных", ex.getMessage());
+    }
+
+    @Test
+    void getPrioritizedTasksTest() {
+        Task task1 = new Task(1, TaskType.TASK, "task1", "test description", Status.NEW,
+                LocalDateTime.of(2022, 9, 26, 18, 0), Duration.ofMinutes(30));
+        Task task2 = new Task(1, TaskType.TASK, "task1", "test description", Status.NEW,
+                null, null);
+        Subtask subtask1 = new Subtask(3, TaskType.SUBTASK, "subtask1", "test description", Status.NEW,
+                2, LocalDateTime.of(2022, 9, 27, 19, 0), Duration.ofMinutes(30));
+        Subtask subtask2 = new Subtask(4, TaskType.SUBTASK, "subtask2", "test description", Status.NEW,
+                2, LocalDateTime.of(2022, 9, 25, 20, 0), Duration.ofMinutes(30));
+        manager.add(task1);
+        manager.add(task2);
+        manager.add(subtask1);
+        manager.add(subtask2);
+        List<Task> prioritizedTasksTest = new ArrayList<>();
+        prioritizedTasksTest.add(subtask2);
+        prioritizedTasksTest.add(task1);
+        prioritizedTasksTest.add(subtask1);
+        prioritizedTasksTest.add(task2);
+        assertEquals(4, manager.getPrioritizedTasks().size());
+        int i = 0;
+        for (Task task : manager.getPrioritizedTasks()) {
+            assertEquals(task, prioritizedTasksTest.get(i++));
+        }
+    }
+
+    @Test
+    void getTaskEndTimeTest() {
+        Task task = new Task(1, TaskType.TASK, "task1", "test description", Status.NEW,
+                LocalDateTime.of(2022, 9, 26, 18, 0), Duration.ofMinutes(30));
+        manager.getTaskEndTime(task);
+        assertEquals(task.getStartTime().plusMinutes(30), task.getEndTime());
+    }
+
+    @Test
+    void getSubtaskEndTimeTest() {
+        Subtask subtask = new Subtask(3, TaskType.SUBTASK, "subtask", "test description", Status.NEW,
+                2, LocalDateTime.of(2022, 9, 27, 19, 0), Duration.ofMinutes(30));
+        manager.getSubtaskEndTime(subtask);
+        assertEquals(subtask.getStartTime().plusMinutes(30), subtask.getEndTime());
+    }
+
+    @Test
+    void getEpicTimesAndDurationTest() {
+        manager.add(new Epic(1, TaskType.EPIC, "new epic", "test description", Status.NEW));
+        Subtask s1 = new Subtask(2, TaskType.SUBTASK, "epic end", "test description", Status.NEW,
+                1, LocalDateTime.of(2022, 9, 26, 20, 0), Duration.ofMinutes(30));
+        Subtask s2 = new Subtask(3, TaskType.SUBTASK, "epic start", "test description", Status.NEW,
+                1, LocalDateTime.of(2022, 9, 26, 18, 0), Duration.ofMinutes(30));
+        Subtask s3 = new Subtask(4, TaskType.SUBTASK, "subtask", "test description", Status.NEW,
+                1, LocalDateTime.of(2022, 9, 26, 19, 0), Duration.ofMinutes(45));
+        manager.add(s1);
+        manager.add(s2);
+        manager.add(s3);
+
+        assertEquals(manager.getEpics().get(1).getStartTime(), manager.getSubtasks().get(3).getStartTime());
+        assertEquals(manager.getEpics().get(1).getEndTime(), manager.getSubtasks().get(2).getEndTime());
+        assertEquals(Duration.ofMinutes(150), manager.getEpics().get(1).getDuration());
+    }
+
 
 
 }

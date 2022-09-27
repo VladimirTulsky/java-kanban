@@ -6,6 +6,7 @@ import tasks.Task;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface TaskManager {
     Map<Integer, Task> getTasks();
@@ -35,13 +36,12 @@ public interface TaskManager {
 
     void intersectionCheck();
 
-    void getPrioritizedTasks();
+    Set<Task> getPrioritizedTasks();
 
     void getTaskEndTime(Task task);
 
     void getEpicTimesAndDuration(Epic epic);
 
     void getSubtaskEndTime(Subtask subtask);
-
 
 }
