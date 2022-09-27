@@ -287,6 +287,28 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(Duration.ofMinutes(150), manager.getEpics().get(1).getDuration());
     }
 
+    @Test
+    void getHistoryTest() {
+        Epic epic = new Epic(1, TaskType.EPIC, "new epic", "test description", Status.NEW);
+        Subtask s1 = new Subtask(2, TaskType.SUBTASK, "epic end", "test description", Status.NEW,
+                1, LocalDateTime.of(2022, 9, 26, 20, 0), Duration.ofMinutes(30));
+        Subtask s2 = new Subtask(3, TaskType.SUBTASK, "epic start", "test description", Status.NEW,
+                1, LocalDateTime.of(2022, 9, 26, 18, 0), Duration.ofMinutes(30));
+        Subtask s3 = new Subtask(4, TaskType.SUBTASK, "subtask", "test description", Status.NEW,
+                1, LocalDateTime.of(2022, 9, 26, 19, 0), Duration.ofMinutes(45));
+        manager.add(epic);
+        manager.add(s1);
+        manager.add(s2);
+        manager.add(s3);
 
+        manager.getEpicById(1);
+        manager.getSubtaskById(4);
+        manager.getEpicById(1);
+        manager.getSubtaskById(2);
+        Task[] historyTest = {s3, epic, s1};
+
+        Assertions.assertArrayEquals(historyTest, manager.getHistory().toArray());
+
+    }
 
 }

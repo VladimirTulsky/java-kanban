@@ -22,14 +22,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     private final static String PATH = "resources/data.csv";
 
     //метод возвращает объект с историей из файла
-    public static FileBackedTasksManager loadedFromFileTasksManager () {
+    public static FileBackedTasksManager loadedFromFileTasksManager() {
         var fileManager = new FileBackedTasksManager();
         fileManager.loadFromFile();
         return fileManager;
     }
 
     //метод сохранения данных в файл
-    public void save() {
+    private void save() {
         allTasks.clear();
         allTasks.putAll(getTasks());
         allTasks.putAll(getEpics());
@@ -42,12 +42,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
     //метод загрузки данных из файла, вызывающий методы загрузки задач и истории
-    public void loadFromFile() {
+    private void loadFromFile() {
         tasksFromString();
         historyFromString();
     }
 
-    public void tasksFromString() {
+    private void tasksFromString() {
         String[] lines;
         try {
             lines = Files.readString(Path.of(PATH)).split("\n");
@@ -115,7 +115,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    public void historyFromString() {
+    private void historyFromString() {
         String[] lines;
         try {
             lines = Files.readString(Path.of(PATH)).split("\n");
@@ -125,7 +125,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         allTasks.putAll(getTasks());
         allTasks.putAll(getEpics());
         allTasks.putAll(getSubtasks());
-        if (lines[lines.length - 2].isBlank() && lines.length >= 4) {
+        if (lines.length < 4) return;
+        if (lines[lines.length - 2].isBlank()) {
             String historyLine = lines[lines.length - 1];
             String[] historyLineContents = historyLine.split(",");
             for (String s : historyLineContents) {
@@ -134,7 +135,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    public String historyToString() throws IOException {
+    private String historyToString() throws IOException {
         if (historyManager.getHistory() == null) return "";
         List<Task> historyList = historyManager.getHistory();
         StringBuilder sb = new StringBuilder();
@@ -145,7 +146,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return sb.toString();
     }
 
-    public String tasksToString() throws IOException {
+    private String tasksToString() throws IOException {
         StringBuilder sb = new StringBuilder();
         for (Task task : allTasks.values()) {
             if (task.getType() == TaskType.TASK || task.getType() == TaskType.EPIC) {
