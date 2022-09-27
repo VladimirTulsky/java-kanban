@@ -16,16 +16,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class HistoryManagerTest extends InMemoryHistoryManager {
 
-//    HistoryManager manager = createHistoryManager();
-//
-//    @BeforeEach
-//    protected HistoryManager createHistoryManager() {
-//        return new InMemoryHistoryManager();
-//    }
+    HistoryManager manager;
+
+    @BeforeEach
+    void createHistoryManager() {
+        manager = new InMemoryHistoryManager();
+    }
 
     @Test
     void addHistoryAndRemoveHistoryAndGetHistoryTest() {
-        HistoryManager manager = new InMemoryHistoryManager();
         Epic epic = new Epic(1, TaskType.EPIC, "new epic", "test description", Status.NEW);
         Subtask s1 = new Subtask(2, TaskType.SUBTASK, "subtask 1", "test description", Status.NEW,
                 1, LocalDateTime.of(2022, 9, 26, 20, 0), Duration.ofMinutes(30));
@@ -60,13 +59,11 @@ public class HistoryManagerTest extends InMemoryHistoryManager {
 
     @Test
     void emptyHistoryTest() {
-        HistoryManager manager = new InMemoryHistoryManager();
         assertNull(manager.getHistory());
     }
 
     @Test
     void duplicateInHistoryTest() {
-        HistoryManager manager = new InMemoryHistoryManager();
         Epic epic = new Epic(1, TaskType.EPIC, "new epic", "test description", Status.NEW);
 
         manager.add(epic);
@@ -76,5 +73,4 @@ public class HistoryManagerTest extends InMemoryHistoryManager {
 
         assertEquals(1, manager.getHistory().size());
     }
-
 }
