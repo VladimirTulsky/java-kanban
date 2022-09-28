@@ -234,19 +234,23 @@ abstract class TaskManagerTest<T extends TaskManager> {
         Task task2 = new Task(1, TaskType.TASK, "task1", "test description", Status.NEW,
                 null, null);
         Subtask subtask1 = new Subtask(3, TaskType.SUBTASK, "subtask1", "test description", Status.NEW,
-                2, LocalDateTime.of(2022, 9, 27, 19, 0), Duration.ofMinutes(30));
+                2, LocalDateTime.of(2022, 9, 26, 19, 0), Duration.ofMinutes(30));
         Subtask subtask2 = new Subtask(4, TaskType.SUBTASK, "subtask2", "test description", Status.NEW,
                 2, LocalDateTime.of(2022, 9, 25, 20, 0), Duration.ofMinutes(30));
+        Subtask subtask3 = new Subtask(5, TaskType.SUBTASK, "subtask2", "test description", Status.NEW,
+                2, null, null);
         manager.add(task1);
         manager.add(task2);
         manager.add(subtask1);
         manager.add(subtask2);
+        manager.add(subtask3);
         List<Task> prioritizedTasksTest = new ArrayList<>();
         prioritizedTasksTest.add(subtask2);
         prioritizedTasksTest.add(task1);
         prioritizedTasksTest.add(subtask1);
         prioritizedTasksTest.add(task2);
-        assertEquals(4, manager.getPrioritizedTasks().size());
+        prioritizedTasksTest.add(subtask3);
+        assertEquals(5, manager.getPrioritizedTasks().size());
         int i = 0;
         for (Task task : manager.getPrioritizedTasks()) {
             assertEquals(task, prioritizedTasksTest.get(i++));
