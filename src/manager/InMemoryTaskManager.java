@@ -16,7 +16,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     /**
      * если у обоих объектов startTime == null, то сравниваем по id
-     * затем сравниваем если у одного из элементов tartTime == null
+     * затем сравниваем если у одного из элементов startTime == null
      * далее сравниваем, если startTime у обоих объектов не null
      * Если startTime равны, то сортируем по id
      *
