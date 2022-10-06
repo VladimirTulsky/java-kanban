@@ -35,7 +35,7 @@ public class CustomLinkedList<T> {
         }
     }
 
-    public List getTasks() {
+    public List<T> getTasks() {
         List<T> historyList = new ArrayList<>();
         Node<T> item = head;
         if (head.next == null) {
