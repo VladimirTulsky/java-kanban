@@ -1,5 +1,7 @@
 package manager;
 
+import tasks.Epic;
+import tasks.Subtask;
 import tasks.Task;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +16,18 @@ public class InMemoryHistoryManager implements HistoryManager {
         removeFromHistory(task);
         historyList.addLast(task);
         nodeMap.put(task.getId(), historyList.tail.prev);
+    }
+
+    public void add(Epic epic) {
+        removeFromHistory(epic);
+        historyList.addLast(epic);
+        nodeMap.put(epic.getId(), historyList.tail.prev);
+    }
+
+    public void add(Subtask subtask) {
+        removeFromHistory(subtask);
+        historyList.addLast(subtask);
+        nodeMap.put(subtask.getId(), historyList.tail.prev);
     }
 
     @Override

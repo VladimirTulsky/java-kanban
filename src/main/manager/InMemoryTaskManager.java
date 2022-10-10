@@ -1,7 +1,11 @@
 package manager;
 
 import filemanager.ManagerSaveException;
-import tasks.*;
+import filemanager.TaskType;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -72,8 +76,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void getTaskEndTime(Task task) {
-        if (task.getStartTime() == null || task.getDuration() == null) return;
-        LocalDateTime endTime = task.getStartTime().plus(task.getDuration());
+        if (task.getStartTime() == null || task.getDuration() == 0) return;
+        LocalDateTime endTime = task.getStartTime().plusMinutes(task.getDuration());
         task.setEndTime(endTime);
     }
 
@@ -98,13 +102,13 @@ public class InMemoryTaskManager implements TaskManager {
         }
         epic.setStartTime(start);
         epic.setEndTime(end);
-        epic.setDuration(Duration.between(epic.getStartTime(), epic.getEndTime()));
+        epic.setDuration(Duration.between(epic.getStartTime(), epic.getEndTime()).toMinutes());
     }
 
     @Override
     public void getSubtaskEndTime(Subtask subtask) {
-        if (subtask.getStartTime() == null || subtask.getDuration() == null) return;
-        LocalDateTime endTime = subtask.getStartTime().plus(subtask.getDuration());
+        if (subtask.getStartTime() == null || subtask.getDuration() == 0) return;
+        LocalDateTime endTime = subtask.getStartTime().plusMinutes(subtask.getDuration());
         subtask.setEndTime(endTime);
         if (epics.containsKey(subtask.getEpicID())) {
             getEpicTimesAndDuration(epics.get(subtask.getEpicID()));
@@ -113,18 +117,21 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTaskById(int id) {
+        if (!tasks.containsKey(id)) return null;
         historyManager.add(tasks.get(id));
         return tasks.get(id);
     }
 
     @Override
     public Epic getEpicById(int id) {
+        if (!epics.containsKey(id)) return null;
         historyManager.add(epics.get(id));
         return epics.get(id);
     }
 
     @Override
     public Subtask getSubtaskById(int id) {
+        if (!subtasks.containsKey(id)) return null;
         historyManager.add(subtasks.get(id));
         return subtasks.get(id);
     }
@@ -215,11 +222,31 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllTasks() {
+        if (prioritizedTasks.size() > 0) {
+            prioritizedTasks.removeIf(task -> task.getType() == TaskType.TASK);
+        }
+        if (historyManager.getHistory() != null) {
+            for (Task task : historyManager.getHistory()) {
+                if (task.getType().equals(TaskType.TASK)) {
+                    historyManager.removeFromHistory(task);
+                }
+            }
+        }
         tasks.clear();
     }
 
     @Override
     public void removeAllEpicsAndSubtasks() {
+        if (prioritizedTasks.size() > 0) {
+            prioritizedTasks.removeIf(task -> task.getType() == TaskType.EPIC || task.getType() == TaskType.SUBTASK);
+        }
+        if (historyManager.getHistory() != null) {
+            for (Task task : historyManager.getHistory()) {
+                if (task.getType().equals(TaskType.EPIC) || task.getType().equals(TaskType.SUBTASK)) {
+                    historyManager.removeFromHistory(task);
+                }
+            }
+        }
         epics.clear();
         subtasks.clear();
     }

@@ -1,8 +1,6 @@
-package tests;
+package filemanager;
 
-import filemanager.FileBackedTasksManager;
-import filemanager.ManagerSaveException;
-import filemanager.TaskType;
+import manager.TaskManagerTest;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Status;
@@ -14,7 +12,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
 
     @Override
-    protected FileBackedTasksManager createManager() {
+    public FileBackedTasksManager createManager() {
         FileBackedTasksManager.setIdCounter(1);
         return new FileBackedTasksManager();
     }
@@ -32,11 +29,11 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
     void loadedFromFileTasksManagerTest() {
         Epic epic = new Epic(1, TaskType.EPIC, "new epic", "test description", Status.NEW);
         Subtask s1 = new Subtask(2, TaskType.SUBTASK, "subtask 1", "test description", Status.NEW,
-                1, LocalDateTime.of(2022, 9, 26, 20, 0), Duration.ofMinutes(30));
+                1, LocalDateTime.of(2022, 9, 26, 20, 0), 30);
         Subtask s2 = new Subtask(3, TaskType.SUBTASK, "subtask 2", "test description", Status.NEW,
-                1, LocalDateTime.of(2022, 9, 26, 18, 0), Duration.ofMinutes(30));
+                1, LocalDateTime.of(2022, 9, 26, 18, 0), 30);
         Subtask s3 = new Subtask(4, TaskType.SUBTASK, "subtask 3", "test description", Status.NEW,
-                1, LocalDateTime.of(2022, 9, 26, 19, 0), Duration.ofMinutes(45));
+                1, LocalDateTime.of(2022, 9, 26, 19, 0), 45);
         manager.add(epic);
         manager.add(s1);
         manager.add(s2);

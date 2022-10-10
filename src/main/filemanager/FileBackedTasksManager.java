@@ -2,6 +2,7 @@ package filemanager;
 
 import manager.InMemoryTaskManager;
 
+import manager.TaskManager;
 import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
@@ -10,26 +11,24 @@ import tasks.Task;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class FileBackedTasksManager extends InMemoryTaskManager {
+public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
 
     protected Map<Integer, Task> allTasks = new HashMap<>();
 
     private final static String HEAD = "id,type,title,description,status,duration,startTime,endTime,epic\n";
-    private final static String PATH = "resources/data.csv";
+    private static final String PATH = "resources/data.csv";
 
-    //метод возвращает объект с историей из файла
     public static FileBackedTasksManager loadedFromFileTasksManager() {
-        var fileManager = new FileBackedTasksManager();
+        FileBackedTasksManager fileManager = new FileBackedTasksManager();
         fileManager.loadFromFile();
         return fileManager;
     }
 
     //метод сохранения данных в файл
-    private void save() {
+    protected void save() {
         allTasks.clear();
         allTasks.putAll(getTasks());
         allTasks.putAll(getEpics());
@@ -41,10 +40,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             throw new ManagerSaveException("Ошибка в работе менеджера");
         }
     }
-    //метод загрузки данных из файла, вызывающий методы загрузки задач и истории
-    private void loadFromFile() {
+
+    public void loadFromFile() {
         tasksFromString();
         historyFromString();
+        prioritizedTasks = getPrioritizedTasks();
     }
 
     private void tasksFromString() {
@@ -64,8 +64,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     String title = lineContents[2];
                     String description = lineContents[3];
                     Status status = Enum.valueOf(Status.class, lineContents[4]);
-                    Duration duration = null;
-                    if (!lineContents[5].equals("null")) duration = Duration.parse(lineContents[5]);
+                    long duration = Long.parseLong(lineContents[5]);
                     LocalDateTime startTime = null;
                     if (!lineContents[6].equals("null")) startTime = LocalDateTime.parse(lineContents[6]);
                     Task task = new Task(id, TaskType.TASK, title, description, status, startTime, duration);
@@ -94,8 +93,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     String title = lineContents[2];
                     String description = lineContents[3];
                     Status status = Enum.valueOf(Status.class, lineContents[4]);
-                    Duration duration = null;
-                    if (!lineContents[5].equals("null")) duration = Duration.parse(lineContents[5]);
+                    long duration = Long.parseLong(lineContents[5]);
                     LocalDateTime startTime = null;
                     if (!lineContents[6].equals("null")) startTime = LocalDateTime.parse(lineContents[6]);
                     int epicId = Integer.parseInt(lineContents[8]);
@@ -135,7 +133,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    private String historyToString() throws IOException {
+    protected String historyToString() throws IOException {
         if (historyManager.getHistory() == null) return "";
         List<Task> historyList = historyManager.getHistory();
         StringBuilder sb = new StringBuilder();
@@ -187,6 +185,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return subtask.getId();
     }
 
+    public Map<Integer, Task> getAllTasks() {
+        return allTasks;
+    }
+
     @Override
     public Task getTaskById(int id) {
         Task task = super.getTaskById(id);
@@ -230,6 +232,18 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public void removeSubtaskById(Integer id) {
         prioritizedTasks.remove(subtasks.get(id));
         super.removeSubtaskById(id);
+        save();
+    }
+
+    @Override
+    public void removeAllTasks() {
+        super.removeAllTasks();
+        save();
+    }
+
+    @Override
+    public void removeAllEpicsAndSubtasks() {
+        super.removeAllEpicsAndSubtasks();
         save();
     }
 }

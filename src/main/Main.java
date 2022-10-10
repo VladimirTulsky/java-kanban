@@ -6,7 +6,6 @@ import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Main {
@@ -15,17 +14,17 @@ public class Main {
         var fileManager = Managers.getDefaultFileManager();
         //создаем объекты и закидываем в файл
         fileManager.add(new Task(FileBackedTasksManager.getIdCounter(), TaskType.TASK, "Продать авто",
-                "продать", Status.NEW, LocalDateTime.of(2022, 9, 25, 13, 30, 15), Duration.ofMinutes(30)));
+                "продать", Status.NEW, LocalDateTime.of(2022, 9, 25, 13, 30, 15), 30));
         fileManager.add(new Task(FileBackedTasksManager.getIdCounter(), TaskType.TASK, "Потратиться на себя",
-                "Сделать себе приятно", Status.NEW, LocalDateTime.of(2022, 9, 26, 12, 0, 15), Duration.ofMinutes(45)));
+                "Сделать себе приятно", Status.NEW, LocalDateTime.of(2022, 9, 26, 12, 0, 15), 30));
         fileManager.add(new Epic(FileBackedTasksManager.getIdCounter(), TaskType.EPIC, "Пройти курс Java-разработчик",
                 "пройти все спринты", Status.NEW));
         fileManager.add(new Subtask(FileBackedTasksManager.getIdCounter(), TaskType.SUBTASK, "Пройти Java Core",
-                "База", Status.NEW, 7, LocalDateTime.now(), Duration.ofMinutes(30)));
+                "База", Status.NEW, 7, LocalDateTime.now(), 30));
         fileManager.add(new Subtask(FileBackedTasksManager.getIdCounter(), TaskType.SUBTASK, "Стать гуру Spring",
-                "Важная задача", Status.NEW, 7, LocalDateTime.of(2022, 9, 24, 10, 0, 15), Duration.ofMinutes(45)));
+                "Важная задача", Status.NEW, 7, LocalDateTime.of(2022, 9, 24, 10, 0, 15), 45));
         fileManager.add(new Subtask(FileBackedTasksManager.getIdCounter(), TaskType.SUBTASK, "Сдать тесты",
-                "Важная задача", Status.NEW, 7, LocalDateTime.of(2022, 9, 25, 11, 0, 15), Duration.ofMinutes(120)));
+                "Важная задача", Status.NEW, 7, LocalDateTime.of(2022, 9, 25, 11, 0, 15), 120));
         fileManager.add(new Epic(FileBackedTasksManager.getIdCounter(), TaskType.EPIC, "Английский",
                 "дойти до уровня Native", Status.NEW));
 
@@ -35,7 +34,7 @@ public class Main {
 
 
         System.out.println("Sorted by start time------------------");
-        fileManager.getPrioritizedTasks();
+        System.out.println(fileManager.getPrioritizedTasks());
 
         var fileManager1 = FileBackedTasksManager.loadedFromFileTasksManager();
         System.out.println(("All tasks------------------"));

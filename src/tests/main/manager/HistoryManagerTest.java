@@ -1,4 +1,4 @@
-package tests;
+package manager;
 
 import filemanager.TaskType;
 import manager.HistoryManager;
@@ -27,11 +27,11 @@ public class HistoryManagerTest extends InMemoryHistoryManager {
     void addHistoryAndRemoveHistoryAndGetHistoryTest() {
         Epic epic = new Epic(1, TaskType.EPIC, "new epic", "test description", Status.NEW);
         Subtask s1 = new Subtask(2, TaskType.SUBTASK, "subtask 1", "test description", Status.NEW,
-                1, LocalDateTime.of(2022, 9, 26, 20, 0), Duration.ofMinutes(30));
+                1, LocalDateTime.of(2022, 9, 26, 20, 0), 30);
         Subtask s2 = new Subtask(3, TaskType.SUBTASK, "subtask 2", "test description", Status.NEW,
-                1, LocalDateTime.of(2022, 9, 26, 18, 0), Duration.ofMinutes(30));
+                1, LocalDateTime.of(2022, 9, 26, 18, 0), 30);
         Subtask s3 = new Subtask(4, TaskType.SUBTASK, "subtask 3", "test description", Status.NEW,
-                1, LocalDateTime.of(2022, 9, 26, 19, 0), Duration.ofMinutes(45));
+                1, LocalDateTime.of(2022, 9, 26, 19, 0), 45);
         manager.add(epic);
         manager.add(s1);
         manager.add(s2);

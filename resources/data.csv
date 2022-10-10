@@ -1,7 +1,10 @@
 id,type,title,description,status,duration,startTime,endTime,epic
-1,EPIC,new epic,test description,NEW,PT2H30M,2022-09-26T18:00,2022-09-26T20:30
-2,SUBTASK,subtask 1,test description,NEW,PT30M,2022-09-26T20:00,2022-09-26T20:30,1
-3,SUBTASK,subtask 2,test description,NEW,PT30M,2022-09-26T18:00,2022-09-26T18:30,1
-4,SUBTASK,subtask 3,test description,NEW,PT45M,2022-09-26T19:00,2022-09-26T19:45,1
+1,TASK,Продать авто,продать,NEW,30,2022-09-25T13:30:15,2022-09-25T14:00:15
+2,TASK,Потратиться на себя,Сделать себе приятно,NEW,30,2022-09-26T12:00:15,2022-09-26T12:30:15
+3,EPIC,Пройти курс Java-разработчик,пройти все спринты,NEW,0,null,null
+4,SUBTASK,Пройти Java Core,База,NEW,30,2022-10-10T23:34:48.586812600,2022-10-11T00:04:48.586812600,7
+5,SUBTASK,Стать гуру Spring,Важная задача,NEW,45,2022-09-24T10:00:15,2022-09-24T10:45:15,7
+6,SUBTASK,Сдать тесты,Важная задача,NEW,120,2022-09-25T11:00:15,2022-09-25T13:00:15,7
+7,EPIC,Английский,дойти до уровня Native,NEW,23884,2022-09-24T10:00:15,2022-10-11T00:04:48.586812600
 
-4,1,2
+1,7,3

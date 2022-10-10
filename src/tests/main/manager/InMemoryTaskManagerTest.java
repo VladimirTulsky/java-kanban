@@ -1,13 +1,11 @@
-package tests;
+package manager;
 
 import filemanager.TaskType;
-import manager.InMemoryTaskManager;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Status;
 import tasks.Task;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
     @Override
-    protected InMemoryTaskManager createManager() {
+    public InMemoryTaskManager createManager() {
         InMemoryTaskManager.setIdCounter(1);
         return new InMemoryTaskManager();
     }
@@ -23,9 +21,9 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
     @Test
     void getIdCounterTest() {
         manager.add(new Task(1, TaskType.TASK, "Task1", "test description", Status.NEW,
-                LocalDateTime.of(2022, 9, 26, 18, 0), Duration.ofMinutes(30)));
+                LocalDateTime.of(2022, 9, 26, 18, 0), 30));
         manager.add(new Task(2, TaskType.TASK, "Task2", "test description", Status.NEW,
-                LocalDateTime.of(2022, 9, 26, 18, 0), Duration.ofMinutes(30)));
+                LocalDateTime.of(2022, 9, 26, 18, 0), 30));
         manager.add(new Epic(3, TaskType.EPIC, "new epic", "test description", Status.NEW));
 
         assertEquals(4, InMemoryTaskManager.getIdCounter());
