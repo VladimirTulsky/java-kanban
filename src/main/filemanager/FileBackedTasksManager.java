@@ -68,7 +68,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                     LocalDateTime startTime = null;
                     if (!lineContents[6].equals("null")) startTime = LocalDateTime.parse(lineContents[6]);
                     Task task = new Task(id, TaskType.TASK, title, description, status, startTime, duration);
-                    if (!lineContents[6].equals("null")) task.setEndTime(LocalDateTime.parse(lineContents[7]));
+                    if (!lineContents[6].equals("null")) task.setEndTime(task.getStartTime().plusMinutes(duration));
                     tasks.put(id, task);
                     if (getIdCounter() <= id) setIdCounter(++id);
                     prioritizedTasks.add(task);
