@@ -24,6 +24,7 @@ public class HTTPTaskManager extends FileBackedTasksManager {
         kvTaskClient = new KVTaskClient(path);
         kvTaskClient.register();
     }
+
     public void saveTasks() throws IOException {
         if (kvTaskClient == null) {
             System.out.println("Требуется регистрация");
@@ -72,6 +73,8 @@ public class HTTPTaskManager extends FileBackedTasksManager {
 
     @Override
     public int add(Task task) {
+        task.setId(idCounter++);
+        getTaskEndTime(task);
         prioritizedTasks.add(task);
         tasks.put(task.getId(), task);
         save();
@@ -79,6 +82,8 @@ public class HTTPTaskManager extends FileBackedTasksManager {
     }
     @Override
     public int add(Epic epic) {
+        epic.setId(idCounter++);
+        getEpicTimesAndDuration(epic);
         prioritizedTasks.add(epic);
         epics.put(epic.getId(), epic);
         save();
@@ -86,6 +91,8 @@ public class HTTPTaskManager extends FileBackedTasksManager {
     }
     @Override
     public int add(Subtask subtask) {
+        subtask.setId(idCounter++);
+        getSubtaskEndTime(subtask);
         prioritizedTasks.add(subtask);
         subtasks.put(subtask.getId(), subtask);
         save();

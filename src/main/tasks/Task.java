@@ -2,7 +2,6 @@ package tasks;
 
 import filemanager.TaskType;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Task {

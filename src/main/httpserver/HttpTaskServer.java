@@ -31,6 +31,7 @@ public class HttpTaskServer {
     }
 
     public void start() {
+
         System.out.println("Запускаем сервер на порту " + PORT);
 
         httpServer.start();
