@@ -4,6 +4,7 @@ import httpclient.HTTPTaskManager;
 import kvserver.KVServer;
 import manager.Managers;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,6 +33,6 @@ public class LoadFromKVServerTest {
         HTTPTaskManager loadedFromServerManager = new HTTPTaskManager("http://localhost:8078");
         loadedFromServerManager.getToken();
         loadedFromServerManager.loadTasks();
+        Assertions.assertEquals(httpTaskManager.getAllTasks().size(), loadedFromServerManager.getAllTasks().size());
     }
-
 }
