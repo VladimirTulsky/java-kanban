@@ -17,6 +17,7 @@ import java.util.*;
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
 
     protected Map<Integer, Task> allTasks = new HashMap<>();
+    Formatter formatter = new Formatter();
 
     private final static String HEAD = "id,type,title,description,status,duration,startTime,endTime,epic\n";
     private static final String PATH = "resources/data.csv";
@@ -27,14 +28,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         return fileManager;
     }
 
-    //метод сохранения данных в файл
     protected void save() {
         allTasks.clear();
         allTasks.putAll(getTasks());
         allTasks.putAll(getEpics());
         allTasks.putAll(getSubtasks());
         try (Writer writer = new FileWriter(PATH)) {
-            String stringToFile = HEAD + tasksToString() + "\n" + historyToString();
+            String stringToFile = HEAD + formatter.tasksToString(allTasks) + "\n" + formatter.historyToString(historyManager);
             writer.write(stringToFile);
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка в работе менеджера");
@@ -131,37 +131,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                 historyManager.add(allTasks.get(Integer.parseInt(s)));
             }
         }
-    }
-
-    protected String historyToString() throws IOException {
-        if (historyManager.getHistory() == null) return "";
-        List<Task> historyList = historyManager.getHistory();
-        StringBuilder sb = new StringBuilder();
-        for (Task task : historyList) {
-            sb.append(task.getId()).append(",");
-        }
-        sb.deleteCharAt(sb.length() - 1);
-        return sb.toString();
-    }
-
-    private String tasksToString() throws IOException {
-        StringBuilder sb = new StringBuilder();
-        for (Task task : allTasks.values()) {
-            if (task.getType() == TaskType.TASK || task.getType() == TaskType.EPIC) {
-                sb.append(task.getId()).append(",").append(task.getType()).append(",").append(task.getTitle())
-                        .append(",").append(task.getDescription()).append(",").append(task.getStatus()).append(",")
-                        .append(task.getDuration()).append(",")
-                        .append(task.getStartTime()).append(",")
-                        .append(task.getEndTime()).append("\n");
-            } else {
-                Subtask subtask = (Subtask) task;
-                sb.append(task.getId()).append(",").append(task.getType()).append(",").append(task.getTitle())
-                        .append(",").append(task.getDescription()).append(",").append(task.getStatus()).append(",")
-                        .append(task.getDuration()).append(",").append(task.getStartTime()).append(",")
-                        .append(task.getEndTime()).append(",").append(subtask.getEpicID()).append("\n");
-            }
-        }
-        return sb.toString();
     }
 
     @Override

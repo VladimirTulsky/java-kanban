@@ -3,6 +3,7 @@ package tasks;
 import filemanager.TaskType;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Task {
     protected int id;
@@ -96,5 +97,18 @@ public class Task {
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return id == task.id && duration == task.duration && type == task.type && Objects.equals(title, task.title) && Objects.equals(description, task.description) && status == task.status && Objects.equals(startTime, task.startTime) && Objects.equals(endTime, task.endTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, type, title, description, status, duration, startTime, endTime);
     }
 }

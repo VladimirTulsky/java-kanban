@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import httpclient.HTTPTaskManager;
+import httpclient.HttpTaskManager;
 import manager.Managers;
 import tasks.Epic;
 import tasks.Subtask;
@@ -23,11 +23,15 @@ public class HttpTaskServer {
     private static final int PORT = 8080;
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private static Gson gson = new Gson();
-    protected static HTTPTaskManager httpTaskManager = Managers.loadedHTTPTasksManager();
+    protected static HttpTaskManager httpTaskManager = Managers.getDefaultHttpTaskManager("http://localhost:8078", false);
 
     public HttpTaskServer() throws IOException {
         this.httpServer = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
         httpServer.createContext("/tasks", new TasksHandler());
+    }
+
+    public static HttpTaskManager getHttpTaskManager() {
+        return httpTaskManager;
     }
 
     public void start() {
@@ -49,7 +53,7 @@ public class HttpTaskServer {
             String path = exchange.getRequestURI().getPath();
             String method = exchange.getRequestMethod();
             String response = null;
-            int rCode = 404;
+            int rCode;
             switch (method) {
                 case "GET":
                     response = GETRequest(path, exchange);
@@ -120,8 +124,10 @@ public class HttpTaskServer {
             Task task = gson.fromJson(taskBody, Task.class);
             if (httpTaskManager.getTasks().containsKey(task.getId())) {
                 httpTaskManager.update(task);
+                httpTaskManager.getAllTasks().put(task.getId(), task);
             } else {
                 httpTaskManager.add(task);
+                httpTaskManager.getAllTasks().put(task.getId(), task);
             }
         } else if (Pattern.matches("^/tasks/epic$", path)) {
             InputStream inputStream = exchange.getRequestBody();
@@ -129,8 +135,10 @@ public class HttpTaskServer {
             Epic epic = gson.fromJson(epicBody, Epic.class);
             if (httpTaskManager.getTasks().containsKey(epic.getId())) {
                 httpTaskManager.update(epic);
+                httpTaskManager.getAllTasks().put(epic.getId(), epic);
             } else {
                 httpTaskManager.add(epic);
+                httpTaskManager.getAllTasks().put(epic.getId(), epic);
             }
         } else if (Pattern.matches("^/tasks/subtask$", path)) {
             InputStream inputStream = exchange.getRequestBody();
@@ -138,8 +146,10 @@ public class HttpTaskServer {
             Subtask subtask = gson.fromJson(subtaskBody, Subtask.class);
             if (httpTaskManager.getTasks().containsKey(subtask.getId())) {
                 httpTaskManager.update(subtask);
+                httpTaskManager.getAllTasks().put(subtask.getId(), subtask);
             } else {
                 httpTaskManager.add(subtask);
+                httpTaskManager.getAllTasks().put(subtask.getId(), subtask);
             }
         }
     }

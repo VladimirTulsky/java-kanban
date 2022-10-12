@@ -1,7 +1,8 @@
 package manager;
 
+import com.google.gson.Gson;
 import filemanager.FileBackedTasksManager;
-import httpclient.HTTPTaskManager;
+import httpclient.HttpTaskManager;
 
 public class Managers {
     public static TaskManager getDefault() {
@@ -16,15 +17,12 @@ public class Managers {
         return new FileBackedTasksManager();
     }
 
-    public static HTTPTaskManager loadedHTTPTasksManager() {
-        HTTPTaskManager httpTaskManager = new HTTPTaskManager("http://localhost:8078");
-        httpTaskManager.loadFromFile();
-        return httpTaskManager;
+    public static HttpTaskManager getDefaultHttpTaskManager(String path, boolean load) {
+        return new HttpTaskManager(path, load);
     }
 
-//    public static FileBackedTasksManager loadedFromFileTasksManager() {
-//        var fileManager = new FileBackedTasksManager();
-//        fileManager.loadFromFile();
-//        return fileManager;
-//    }
+    public static Gson getGson() {
+        Gson gson = new Gson();
+        return gson;
+    }
 }

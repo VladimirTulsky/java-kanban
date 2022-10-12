@@ -7,12 +7,12 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class KVTaskClient {
-    protected URI url;
+    protected String url;
     protected String apiToken;
     HttpClient client = HttpClient.newHttpClient();
 
     public KVTaskClient(String path) {
-        this.url = URI.create(path);
+        this.url = path;
     }
 
     public String register() {
@@ -55,6 +55,7 @@ public class KVTaskClient {
         if (apiToken == null) {
             return "API_TOKEN не присвоен";
         }
+
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + "/load" + key + "?API_TOKEN=" + apiToken))
                 .GET()
@@ -67,6 +68,6 @@ public class KVTaskClient {
             System.out.println("Во время выполнения запроса возникла ошибка.\n" +
                     "Проверьте, пожалуйста, адрес и повторите попытку.");
         }
-        return "Ошбика получения запроса";
+        return "Ошибка получения запроса";
     }
 }
