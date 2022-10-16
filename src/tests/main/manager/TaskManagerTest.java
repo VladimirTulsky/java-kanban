@@ -310,7 +310,5 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Task[] historyTest = {s3, epic, s1};
 
         Assertions.assertArrayEquals(historyTest, manager.getHistory().toArray());
-
     }
-
 }

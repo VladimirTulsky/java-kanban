@@ -14,7 +14,7 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTasksManager extends InMemoryTaskManager {
 
     protected Map<Integer, Task> allTasks = new HashMap<>();
     Formatter formatter = new Formatter();

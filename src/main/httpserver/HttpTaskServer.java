@@ -122,6 +122,7 @@ public class HttpTaskServer {
             InputStream inputStream = exchange.getRequestBody();
             String taskBody = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
             Task task = gson.fromJson(taskBody, Task.class);
+            //Task task = gson.fromJson(new String(exchange.getRequestBody().readAllBytes(), DEFAULT_CHARSET), Task.class);
             if (httpTaskManager.getTasks().containsKey(task.getId())) {
                 httpTaskManager.update(task);
                 httpTaskManager.getAllTasks().put(task.getId(), task);
