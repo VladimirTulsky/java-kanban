@@ -63,7 +63,6 @@ public class HttpTaskManager extends FileBackedTasksManager {
             allTasks.putAll(getEpics());
         }
 
-
         json = kvTaskClient.load("/subtasks");
         if (!json.equals("Ошибка получения запроса")) {
             Type type = new TypeToken<ArrayList<Subtask>>(){}.getType();
